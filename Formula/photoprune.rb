@@ -10,11 +10,16 @@ class Photoprune < Formula
   depends_on "python@3.12"
 
   def install
-    venv = virtualenv_create(libexec, "python3.12")
-    # Single pip install pulls down the package plus all transitive deps
-    # (torch, faiss-cpu, open-clip-torch, etc.) from PyPI. The `[heic]`
-    # extra adds pillow-heif so iPhone HEIC files work out of the box.
-    venv.pip_install_and_link "#{buildpath}[heic]"
+    virtualenv_create(libexec, "python3.12")
+    # Install package + transitive deps (torch, faiss-cpu, open-clip-torch,
+    # etc.) from PyPI in one shot. We invoke pip directly because brew's
+    # `pip_install_and_link` helper passes --no-deps by default, which
+    # would otherwise force us to enumerate ~70 transitive packages as
+    # `resource` blocks. The `[heic]` extra includes pillow-heif so
+    # iPhone HEIC files work out of the box.
+    system libexec/"bin/pip", "install", "--no-cache-dir", "#{buildpath}[heic]"
+    bin.install_symlink libexec/"bin/photoprune"
+    bin.install_symlink libexec/"bin/photodedupe"
   end
 
   test do
