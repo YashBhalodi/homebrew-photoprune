@@ -13,7 +13,7 @@ class Photoprune < Formula
     # block; we'd need ~70 of those for torch alone. Letting pip resolve
     # deps from PyPI at install time is fine for a custom tap.
     ENV.delete("PYTHONPATH")
-    python = Formula["python@3.11"].opt_bin/"python3.12"
+    python = Formula["python@3.11"].opt_bin/"python3.11"
     system python, "-m", "venv", libexec
     system libexec/"bin/pip", "install", "--no-cache-dir", "--upgrade", "pip"
     # The [heic] extra adds pillow-heif so iPhone HEIC files work out of the box.
