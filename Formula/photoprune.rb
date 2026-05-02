@@ -1,22 +1,25 @@
 class Photoprune < Formula
   desc "Find near-duplicate photos in a directory using CLIP embeddings"
   homepage "https://github.com/YashBhalodi/PhotoPrune"
-  url "https://github.com/YashBhalodi/PhotoPrune/archive/refs/tags/v0.2.0.tar.gz"
-  sha256 "1375da0fbfb1a6b80a3d0d10f6f8c53d0a171d301e965d8051c4903b9f1a4858"
+  url "https://github.com/YashBhalodi/PhotoPrune/archive/refs/tags/v0.4.0.tar.gz"
+  sha256 "2f52f1a0d3b8e92aa3a381957f2a27b1e77b40bab8b19d26f7b20e47f57dca4b"
   license "MIT"
 
   depends_on "python@3.11"
 
   def caveats
     <<~EOS
-      Model weights (CLIP ~340 MB, MobileNetV2 ~14 MB) download on first run
-      into:
+      CLIP weights (~340 MB) download on first run into:
         #{libexec}/.cache/photoprune
 
       `brew uninstall photoprune` removes everything above (~880 MB total)
       cleanly. Per-album review reports / embedding caches / `_trash/`
       folders under `<album>/.photoprune/` are NOT touched — that's your
       data. See the project README for how to clean those up too.
+
+      For scripts and AI agents, use the analytical modes:
+        photoprune --mode json /path/to/photos
+        photoprune --mode text /path/to/photos
     EOS
   end
 
@@ -51,9 +54,12 @@ class Photoprune < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/photoprune --version")
-    # Exercise the CLI on an empty dir — should run without crashing.
+    # --mode json on an empty dir: analytical, no model load needed,
+    # leaves no files behind, and the schema check is stable.
     (testpath/"empty").mkpath
-    output = shell_output("#{bin}/photoprune --no-open --no-wait #{testpath}/empty")
-    assert_match "No supported image files found", output
+    output = shell_output("#{bin}/photoprune --mode json #{testpath}/empty")
+    assert_match(/"version":\s*"1"/, output)
+    assert_match(/"scanned":\s*0/, output)
+    assert_match(/"groups":\s*\[\]/, output)
   end
 end
