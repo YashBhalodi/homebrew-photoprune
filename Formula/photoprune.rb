@@ -5,7 +5,7 @@ class Photoprune < Formula
   sha256 "5a44bbc626f15ef5597eb65fe178c00cd42fb648f12272b0e842e80d95c8b49c"
   license "MIT"
 
-  depends_on "python@3.12"
+  depends_on "python@3.11"
 
   def install
     # Create a plain venv (with pip bootstrapped). Brew's virtualenv_create
@@ -13,7 +13,7 @@ class Photoprune < Formula
     # block; we'd need ~70 of those for torch alone. Letting pip resolve
     # deps from PyPI at install time is fine for a custom tap.
     ENV.delete("PYTHONPATH")
-    python = Formula["python@3.12"].opt_bin/"python3.12"
+    python = Formula["python@3.11"].opt_bin/"python3.12"
     system python, "-m", "venv", libexec
     system libexec/"bin/pip", "install", "--no-cache-dir", "--upgrade", "pip"
     # The [heic] extra adds pillow-heif so iPhone HEIC files work out of the box.
