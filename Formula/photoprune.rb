@@ -1,8 +1,8 @@
 class Photoprune < Formula
   desc "Find near-duplicate photos in a directory using CLIP embeddings"
   homepage "https://github.com/YashBhalodi/PhotoPrune"
-  url "https://github.com/YashBhalodi/PhotoPrune/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 "2f52f1a0d3b8e92aa3a381957f2a27b1e77b40bab8b19d26f7b20e47f57dca4b"
+  url "https://github.com/YashBhalodi/PhotoPrune/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "87d399ed83ed10daa4872834359f95d41f92c1a9a2fec6e6273cdfd0dfd2278f"
   license "MIT"
 
   depends_on "python@3.11"
