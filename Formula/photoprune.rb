@@ -7,6 +7,11 @@ class Photoprune < Formula
 
   depends_on "python@3.11"
 
+  # Skip brew's post-install Mach-O processing for our venv. Brew rewrites
+  # adhoc-signed dylibs in installed prefixes, which breaks torch's
+  # operator registration ("operator torchvision::nms does not exist").
+  skip_clean "libexec"
+
   def install
     # Create a plain venv (with pip bootstrapped). Brew's virtualenv_create
     # uses --without-pip and expects every transitive dep as a `resource`
@@ -20,6 +25,15 @@ class Photoprune < Formula
     system libexec/"bin/pip", "install", "--no-cache-dir", "#{buildpath}[heic]"
     bin.install_symlink libexec/"bin/photoprune"
     bin.install_symlink libexec/"bin/photodedupe"
+  end
+
+  def post_install
+    # Belt-and-suspenders: reinstall torch + torchvision fresh after brew's
+    # install-time binary processing has finished, so their adhoc-signed
+    # Mach-O bundles are pristine.
+    system libexec/"bin/pip", "install", "--no-cache-dir",
+           "--force-reinstall", "--no-deps",
+           "torch==2.11.0", "torchvision==0.26.0"
   end
 
   test do
