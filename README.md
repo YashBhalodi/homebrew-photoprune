@@ -5,10 +5,13 @@ Homebrew tap for [PhotoPrune](https://github.com/YashBhalodi/PhotoPrune) — a l
 ## Install
 
 ```bash
-brew install YashBhalodi/photoprune/photoprune
+brew tap YashBhalodi/photoprune
+brew install photoprune
 ```
 
-This pulls in Python and all of PhotoPrune's heavy dependencies (PyTorch, faiss, CLIP, etc.) into an isolated install. The first install downloads ~700 MB of dependencies and may take a few minutes; subsequent updates are quick.
+The formula brings in Python and the full ML stack (PyTorch, faiss, CLIP, etc.) into a sandboxed install — you don't need Python on your system. First install downloads ~880 MB of dependencies and takes a few minutes.
+
+The explicit equivalent without tapping is `brew install YashBhalodi/photoprune/photoprune`.
 
 ## Usage
 
@@ -17,7 +20,7 @@ cd ~/Pictures/My-Trip
 photoprune
 ```
 
-See the [main repo](https://github.com/YashBhalodi/PhotoPrune) for full documentation.
+See the [main repo](https://github.com/YashBhalodi/PhotoPrune) for full documentation, screenshots, and `--help` output.
 
 ## Updating
 
@@ -32,3 +35,7 @@ brew upgrade photoprune
 brew uninstall photoprune
 brew untap YashBhalodi/photoprune
 ```
+
+## License
+
+[MIT](https://github.com/YashBhalodi/PhotoPrune/blob/main/LICENSE) — same as PhotoPrune itself.
