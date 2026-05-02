@@ -1,11 +1,24 @@
 class Photoprune < Formula
   desc "Find near-duplicate photos in a directory using CLIP embeddings"
   homepage "https://github.com/YashBhalodi/PhotoPrune"
-  url "https://github.com/YashBhalodi/PhotoPrune/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "5a44bbc626f15ef5597eb65fe178c00cd42fb648f12272b0e842e80d95c8b49c"
+  url "https://github.com/YashBhalodi/PhotoPrune/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "1375da0fbfb1a6b80a3d0d10f6f8c53d0a171d301e965d8051c4903b9f1a4858"
   license "MIT"
 
   depends_on "python@3.11"
+
+  def caveats
+    <<~EOS
+      Model weights (CLIP ~340 MB, MobileNetV2 ~14 MB) download on first run
+      into:
+        #{libexec}/.cache/photoprune
+
+      `brew uninstall photoprune` removes everything above (~880 MB total)
+      cleanly. Per-album review reports / embedding caches / `_trash/`
+      folders under `<album>/.photoprune/` are NOT touched — that's your
+      data. See the project README for how to clean those up too.
+    EOS
+  end
 
   # Skip brew's post-install Mach-O processing for our venv. Brew rewrites
   # adhoc-signed dylibs in installed prefixes, which breaks torch's
